@@ -1,0 +1,51 @@
+#!/usr/bin/env sh
+
+function get_cpu_vendor {
+    local cpu_vendor=$(cat /proc/cpuinfo | grep 'vendor' | uniq | awk '{ print $3 }')
+    local ucode
+    case "$cpu_vendor" in
+"GenuineIntel")
+    ucode="intel-ucode"
+    ;;
+"AuthenticAMD")
+    ucode="amd-ucode"
+    ;;
+*)
+    echo "Unknown cpu vendor $cpu_vendor"
+    exit 1
+    ;;
+esac
+    echo "$ucode"
+}
+
+if [ $# -ne 2 ]; then
+    echo 'wrong arguments number'
+    echo 'usage: ./zz1 <password> <profile name from profiles directory>'
+    exit 1
+fi
+
+CDIR=$(dirname "$(readlink -f "$0")")
+PASSWD=$1
+PROFILE=$2
+PROFILES_DIR="$CDIR/profiles"
+
+if [ ! -f "$CDIR/plain_configuration" ]; then
+    [ ! -f "$PROFILES_DIR/$PROFILE" ] && echo "no profile '$PROFILES_DIR/$PROFILE' exists" && exit 1
+    . "$CDIR/decode_configuration.sh" "$PASSWD" "$PROFILE"
+fi
+
+set -a
+. "$CDIR/plain_configuration"
+set +a
+
+. ./partition.sh
+
+CFG_ROOT_DEVICE=$(lsblk -p -n -o NAME -x NAME "$CFG_DEVICE" | tail -1)
+set -a
+CFG_UCODE=$(get_cpu_vendor)
+CFG_ROOT_DEVICE_UUID=$(blkid -s UUID -o value "$CFG_ROOT_DEVICE")
+set +a
+
+ENV_SUBST=$(printf '${%s} ' $(env | cut -d'=' -f1 | grep '^CFG_'))
+# ---------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------

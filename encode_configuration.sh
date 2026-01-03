@@ -1,0 +1,1 @@
+/home/azat/repo/ALI/profile/airootfs/root/encode_configuration.sh

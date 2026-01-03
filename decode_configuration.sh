@@ -1,0 +1,1 @@
+/home/azat/repo/ALI/profile/airootfs/root/decode_configuration.sh
