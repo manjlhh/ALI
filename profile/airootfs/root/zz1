@@ -30,7 +30,10 @@ PROFILE=$2
 PROFILES_DIR="$CDIR/profiles"
 
 if [ ! -f "$CDIR/plain_configuration" ]; then
-    [ ! -f "$PROFILES_DIR/$PROFILE" ] && echo "no profile '$PROFILES_DIR/$PROFILE' exists" && exit 1
+    [ ! -f "$PROFILES_DIR/$PROFILE" ] && {
+        echo "no profile '$PROFILES_DIR/$PROFILE' exists"
+        exit 1
+    }
     . "$CDIR/decode_configuration.sh" "$PASSWD" "$PROFILE"
 fi
 
@@ -39,6 +42,16 @@ set -a
 set +a
 
 . ./partition.sh
+
+# ---------------------------------------------------------------------------------
+pacman-key --init
+pacman-key --populate
+# ---------------------------------------------------------------------------------
+mkdir -p /mnt/var/lib/pacman
+cp -r $CDIR/repo/db/* /mnt/var/lib/pacman/
+chmod u+x "$CDIR/pacstrap"
+$CDIR/pacstrap -c -C pacman.conf -K /mnt - <"$CDIR/packages"
+# ---------------------------------------------------------------------------------
 
 CFG_ROOT_DEVICE=$(lsblk -p -n -o NAME -x NAME "$CFG_DEVICE" | tail -1)
 set -a

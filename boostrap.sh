@@ -14,6 +14,7 @@ CDIR=$(dirname "$(readlink -f "$0")")
 PROFILEDIR="$CDIR/profile"
 ROOTFS="$PROFILEDIR/airootfs/root"
 
-cp /usr/share/archiso/configs/releng/packages.x86_64 /usr/share/archiso/configs/releng/pacman.conf "$PROFILEDIR/"
+cp /usr/share/archiso/configs/releng/packages.x86_64 "$PROFILEDIR/"
+cp /usr/share/archiso/configs/releng/pacman.conf "$ROOTFS/"
 
 sed 's/pacmode=-Sy/pacmode=-S/' $(which pacstrap) > "$ROOTFS/pacstrap"
