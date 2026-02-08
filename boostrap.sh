@@ -16,4 +16,4 @@ ROOTFS="$PROFILEDIR/airootfs/root"
 
 cp /usr/share/archiso/configs/releng/packages.x86_64 /usr/share/archiso/configs/releng/pacman.conf "$PROFILEDIR/"
 
-cp $(which pacstrap) "$ROOTFS/"
+sed 's/pacmode=-Sy/pacmode=-S/' $(which pacstrap) > "$ROOTFS/pacstrap"
