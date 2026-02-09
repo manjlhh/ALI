@@ -4,7 +4,6 @@ archinstall
 b43-fwcutter
 base
 bcachefs-tools
-bind
 bolt
 brltty
 broadcom-wl
@@ -17,7 +16,6 @@ dhcpcd
 diffutils
 dmidecode
 dmraid
-dnsmasq
 dosfstools
 e2fsprogs
 edk2-shell
@@ -39,12 +37,9 @@ hyperv
 intel-ucode
 iptables-nft
 irssi
-iw
-iwd
 jfsutils
 ldns
 less
-lftp
 libfido2
 libusb-compat
 linux
@@ -53,7 +48,6 @@ linux-firmware
 linux-firmware-marvell
 lsscsi
 lvm2
-lynx
 man-db
 man-pages
 mc
@@ -68,15 +62,12 @@ mtools
 nbd
 ndisc6
 nfs-utils
-nmap
 ntfs-3g
 nvme-cli
 open-iscsi
 open-vm-tools
-openconnect
 openpgp-card-tools
 openssh
-openvpn
 partclone
 parted
 partimage
