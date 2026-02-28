@@ -57,7 +57,7 @@ pacman-key --populate
 mkdir -p /mnt/var/lib/pacman
 cp -r $SDIR/repo/db/* /mnt/var/lib/pacman/
 chmod u+x "$SDIR/pacstrap"
-cat "$SDIR/packages" | envsubst "$ENV_SUBST" | $SDIR/pacstrap -c -C "$SDIR/pacman.conf" -K /mnt -
+cat "$SDIR/packages" | $SDIR/pacstrap -c -C "$SDIR/pacman.conf" -K /mnt -
 # ---------------------------------------------------------------------------------
 find configurations/common/ -type f -print | xargs dirname | sort | uniq | sed 's|^configurations/common|/mnt|' | xargs mkdir -p
 for conf in $(find configurations/common/ -type f); do

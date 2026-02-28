@@ -1,5 +1,22 @@
 #!/usr/bin/env sh
 
+MODE="$1"
+if [ "$#" -lt 1 ]; then
+    echo "build.sh <full|lite>"
+    exit 1
+fi
+case $MODE in
+"full")
+    PACKAGES_NAME="packages.full"
+    ;;
+"lite")
+    PACKAGES_NAME="packages.lite"
+    ;;
+*)
+    echo "available modes: {full|lite}"
+    ;;
+esac
+
 set -e
 
 pacman -Qqi archiso >/dev/null 2>&1 || PKGS="$PKGS archiso"
@@ -25,6 +42,8 @@ cp -r /usr/share/archiso/configs/releng/* "$PROFILEDIR"
 cp -r $CDIR/profile/* "$PROFILEDIR"
 
 ROOTFS="$PROFILEDIR/airootfs"
+cp "$ROOTFS/root/$PACKAGES_NAME" "$ROOTFS/root/packages"
+
 mkdir -p "$ROOTFS/root/repo/db"
 mkdir -p "$ROOTFS/root/repo/pkg"
 
@@ -34,7 +53,7 @@ rm "$ROOTFS/etc/systemd/system/multi-user.target.wants/ModemManager.service"
 rm "$ROOTFS/etc/systemd/system/multi-user.target.wants/vboxservice.service"
 
 echo 'db & cache'
-sudo pacman -Syw --cachedir "$ROOTFS/root/repo/pkg" --dbpath "$ROOTFS/root/repo/db" - < "$CDIR/packages" \
+sudo pacman -Syyw --cachedir "$ROOTFS/root/repo/pkg" --dbpath "$ROOTFS/root/repo/db" - < "$ROOTFS/root/packages" \
 --noconfirm
 
 # exit 0
