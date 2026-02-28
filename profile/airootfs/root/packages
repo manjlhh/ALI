@@ -1,5 +1,4 @@
 ${CFG_UCODE}
-amd-ucode
 ark
 base
 base-devel
@@ -24,7 +23,6 @@ git-crypt
 gnupg
 gwenview
 htop
-intel-ucode
 iptables-nft
 jdk-openjdk
 jq
