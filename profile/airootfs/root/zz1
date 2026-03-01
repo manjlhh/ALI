@@ -40,7 +40,12 @@ fi
 set -a
 . "$SDIR/plain_configuration"
 set +a
-
+# ---------------------------------------------------------------------------------
+. ./partition.sh
+# ---------------------------------------------------------------------------------
+pacman-key --init
+pacman-key --populate
+# ---------------------------------------------------------------------------------
 CFG_ROOT_DEVICE=$(lsblk -p -n -o NAME -x NAME "$CFG_DEVICE" | tail -1)
 set -a
 CFG_UCODE=$(get_cpu_vendor)
@@ -49,15 +54,13 @@ set +a
 
 ENV_SUBST=$(printf '${%s} ' $(env | cut -d'=' -f1 | grep '^CFG_'))
 # ---------------------------------------------------------------------------------
-. ./partition.sh
-# ---------------------------------------------------------------------------------
-pacman-key --init
-pacman-key --populate
-# ---------------------------------------------------------------------------------
 mkdir -p /mnt/var/lib/pacman
 cp -r $SDIR/repo/db/* /mnt/var/lib/pacman/
 chmod u+x "$SDIR/pacstrap"
 cat "$SDIR/packages" | $SDIR/pacstrap -c -C "$SDIR/pacman.conf" -K /mnt -
+# ---------------------------------------------------------------------------------
+genfstab -U /mnt >> /mnt/etc/fstab
+sed -i 's/relatime/noatime/' /mnt/etc/fstab
 # ---------------------------------------------------------------------------------
 find configurations/common/ -type f -print | xargs dirname | sort | uniq | sed 's|^configurations/common|/mnt|' | xargs mkdir -p
 for conf in $(find configurations/common/ -type f); do
@@ -78,9 +81,13 @@ ln -s /usr/share/zoneinfo/Europe/Samara /etc/localtime
 hwclock --systohc --utc
 printf 'root:$CFG_ROOT_PASSWORD' | chpasswd -e
 useradd -m -g users -G audio,video,power,storage,wheel,scanner,network -p '$CFG_USER_PASSWORD' -s /usr/bin/fish $CFG_USERNAME
-bootctl install
-mkinitcpio -P
 systemctl enable sshd.service
+mkinitcpio -P
+EOF
+arch-chroot -S /mnt sh <<EOF
+bootctl install
+[ -n "$CFG_SERVICES" ] && systemctl enable $CFG_SERVICES
+[ -n "$CFG_GROUPS" ] && usermod -a -G ${CFG_GROUPS// /,} "$CFG_USERNAME"
 EOF
 # ---------------------------------------------------------------------------------
 SSH_KEYS=$(cat "$SDIR/.ssh/authorized_keys")

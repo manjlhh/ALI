@@ -51,6 +51,15 @@ mkdir -p "$ROOTFS/root/repo/pkg"
 rm "$ROOTFS/etc/systemd/system/dbus-org.freedesktop.ModemManager1.service"
 rm "$ROOTFS/etc/systemd/system/multi-user.target.wants/ModemManager.service"
 rm "$ROOTFS/etc/systemd/system/multi-user.target.wants/vboxservice.service"
+rm "$ROOTFS/etc/systemd/system/multi-user.target.wants/systemd-networkd.service"
+rm "$ROOTFS/etc/systemd/system/multi-user.target.wants/systemd-resolved.service"
+rm "$ROOTFS/etc/systemd/system/dbus-org.freedesktop.network1.service"
+rm "$ROOTFS/etc/systemd/system/dbus-org.freedesktop.resolve1.service"
+rm "$ROOTFS/etc/systemd/system/dbus-org.freedesktop.timesync1.service"
+rm "$ROOTFS/etc/systemd/system/network-online.target.wants/systemd-networkd-wait-online.service"
+rm "$ROOTFS/etc/systemd/system/sysinit.target.wants/systemd-time-wait-sync.service"
+rm "$ROOTFS/etc/systemd/system/sysinit.target.wants/systemd-timesyncd.service"
+rm "$ROOTFS/etc/systemd/system/sockets.target.wants/systemd-networkd.socket"
 
 echo 'db & cache'
 sudo pacman -Syyw --cachedir "$ROOTFS/root/repo/pkg" --dbpath "$ROOTFS/root/repo/db" - < "$ROOTFS/root/packages" \

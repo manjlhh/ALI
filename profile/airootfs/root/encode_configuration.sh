@@ -8,11 +8,12 @@ if [ $# -ne 2 ]; then
     exit 1
 fi
 
-CDIR=$(dirname "$(readlink -f "$0")")
+SDIR=$(dirname "$(readlink -f "$0")")
+
 PASSWD=$1
 PROFILE=$2
-PROFILES_DIR="$CDIR/profiles"
+PROFILES_DIR="$SDIR/profiles"
 
 set -e
 
-openssl aes-256-cbc -a -salt -pbkdf2 -pass "pass:$PASSWD" -in "$CDIR/plain_configuration" -out "$PROFILES_DIR/$PROFILE"
+openssl aes-256-cbc -a -salt -pbkdf2 -pass "pass:$PASSWD" -in "$SDIR/plain_configuration" -out "$PROFILES_DIR/$PROFILE"

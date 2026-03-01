@@ -19,4 +19,5 @@ yes | mkfs.ext4 -L system "$CFG_ROOT_DEVICE"
 
 mount "$CFG_ROOT_DEVICE" /mnt
 mkdir -p /mnt/boot
-mount "$CFG_BOOT_DEVICE" /mnt/boot
+chmod 0700 /mnt/boot
+mount "$CFG_BOOT_DEVICE" /mnt/boot -o uid=0,gid=0,fmask=0077,dmask=0077
