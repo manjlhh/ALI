@@ -21,10 +21,12 @@ fish
 git
 git-crypt
 gnupg
+gram
 gwenview
 htop
 intel-ucode
 iptables-nft
+irqbalance
 jdk-openjdk
 jq
 kate
@@ -41,6 +43,7 @@ linux-lts
 linux-lts-headers
 lsof
 man-db
+marknote
 mc
 micro
 mkinitcpio
@@ -72,11 +75,13 @@ polkit
 powerdevil
 qbittorrent
 qt6-multimedia-ffmpeg
+sequoia-sq
 spectacle
 sudo
 syncthing
 tailscale
 telegram-desktop
+tmux
 ttf-hack
 unrar
 unzip
@@ -87,8 +92,8 @@ wl-clipboard
 xdg-user-dirs
 xray-bin
 xz
-yandex-browser
 yay-bin
 yt-dlp
 zbar
 zip
+zram-generator

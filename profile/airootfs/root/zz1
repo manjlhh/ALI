@@ -61,6 +61,7 @@ cat "$SDIR/packages" | $SDIR/pacstrap -c -C "$SDIR/pacman.conf" -K /mnt -
 # ---------------------------------------------------------------------------------
 genfstab -U /mnt >> /mnt/etc/fstab
 sed -i 's/relatime/noatime/' /mnt/etc/fstab
+# rw,relatime,commit=300
 # ---------------------------------------------------------------------------------
 find configurations/common/ -type f -print | xargs dirname | sort | uniq | sed 's|^configurations/common|/mnt|' | xargs mkdir -p
 for conf in $(find configurations/common/ -type f); do
@@ -86,8 +87,8 @@ mkinitcpio -P
 EOF
 arch-chroot -S /mnt sh <<EOF
 bootctl install
-[ -n "$CFG_SERVICES" ] && systemctl enable $CFG_SERVICES
 [ -n "$CFG_GROUPS" ] && usermod -a -G ${CFG_GROUPS// /,} "$CFG_USERNAME"
+[ -n "$CFG_SERVICES" ] && systemctl enable $CFG_SERVICES
 EOF
 # ---------------------------------------------------------------------------------
 SSH_KEYS=$(cat "$SDIR/.ssh/authorized_keys")
